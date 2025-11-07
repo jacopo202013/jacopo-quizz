@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Jacopooo Quiz Show</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      color: #333;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 3em;
+      color: #ff4d4d;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00ffff; }
+      to { text-shadow: 0 0 20px #ff00ff; }
+    }
+    .question {
+      margin: 30px auto;
+      max-width: 600px;
+      text-align: left;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question h2 {
+      font-size: 1.4em;
+    }
+    .options label {
+      display: block;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #ff4d4d;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 1.3em;
+      color: #007700;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Jacopooo Quiz Show</h1>
+  <div class="question" id="quiz">
+    <h2 id="question">Domanda...</h2>
+    <div class="options" id="options"></div>
+    <button onclick="nextQuestion()">Rispondi</button>
+  </div>
+  <div id="result"></div>
+
+  <script>
+    const quiz = [
+      {
+        question: "Qual è il pianeta più vicino al Sole?",
+        options: ["Venere", "Terra", "Mercurio", "Marte"],
+        answer: 2
+      },
+      {
+        question: "Chi ha scritto 'La Divina Commedia'?",
+        options: ["Petrarca", "Dante Alighieri", "Manzoni", "Boccaccio"],
+        answer: 1
+      },
+      {
+        question: "Qual è la capitale del Giappone?",
+        options: ["Kyoto", "Tokyo", "Osaka", "Nagoya"],
+        answer: 1
+      },
+      {
+        question: "Quale elemento ha il simbolo 'O'?",
+        options: ["Oro", "Ossigeno", "Osmio", "Olio"],
+        answer: 1
+      },
+      {
+        question: "In che anno è uscito il primo iPhone?",
+        options: ["2005", "2007", "2009", "2010"],
+        answer: 1
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = quiz[current];
+      document.getElementById("question").textContent = q.question;
+      const opts = document.getElementById("options");
+      opts.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        opts.innerHTML += `<label><input type="radio" name="option" value="${i}"> ${opt}</label>`;
+      });
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("⚠️ Jacopooo dice: scegli una risposta prima di continuare!");
+        return;
+      }
+      if (parseInt(selected.value) === quiz[current].answer) score++;
+      current++;
+      if (current < quiz.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("result").innerHTML = `🎉 Hai totalizzato <strong>${score}</strong> su <strong>${quiz.length}</strong> punti!<br><br>` +
+          (score === quiz.length ? "👑 Sei un campione, Jacopooo approva!" :
+           score >= 3 ? "💪 Ottimo lavoro!" :
+           "😅 Ritenta, sarai più fortunato!");
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
